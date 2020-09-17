@@ -9,11 +9,14 @@ import {DOCUMENT} from '@angular/common';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(@Inject(DOCUMENT) public document: Document, public authService: AuthService) { }
-
+  constructor(@Inject(DOCUMENT) public document: Document, public authService: AuthService) {
+  }
 
   ngOnInit(): void {
-
+    this.authService.getAccessTokenSilently()
+      .subscribe(accessToken => {
+        console.log(accessToken);
+      });
   }
 
 }

@@ -6,10 +6,12 @@ import {AppComponent} from './app.component';
 import {HomeComponent} from './pages/home/home.component';
 import {DashboardComponent} from './pages/dashboard/dashboard.component';
 import {ProfileComponent} from './pages/profile/profile.component';
-import {AuthModule} from '@auth0/auth0-angular';
+import {AuthHttpInterceptor, AuthModule} from '@auth0/auth0-angular';
 import {LoginComponent} from './components/login/login.component';
-import { NavigationComponent } from './components/navigation/navigation.component';
+import {NavigationComponent} from './components/navigation/navigation.component';
 import {environment} from '../environments/environment';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {CallApiComponent} from './pages/call-api/call-api.component';
 
 @NgModule({
   declarations: [
@@ -18,17 +20,31 @@ import {environment} from '../environments/environment';
     DashboardComponent,
     ProfileComponent,
     LoginComponent,
-    NavigationComponent
+    NavigationComponent,
+    CallApiComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     AuthModule.forRoot({
       domain: environment.auth0Domain,
-      clientId: environment.auth0ClientId
+      clientId: environment.auth0ClientId,
+      audience: environment.auth0Audience,
+      httpInterceptor: {
+        allowedList: [
+          `${environment.apiBaseUrl}/*`
+        ]
+      }
     }),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthHttpInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
