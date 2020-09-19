@@ -12,13 +12,18 @@ export class CallApiComponent implements OnInit {
   constructor(private http: HttpClient) {
   }
 
+  privateApiResponse;
+  publicApiResponse;
+
   ngOnInit(): void {
     this.http.get(`${environment.apiBaseUrl}/private/greeting`, {responseType: 'text'}).subscribe(response => {
       console.log('Private = ' + response);
+      this.privateApiResponse = response;
     });
 
     this.http.get(`${environment.apiBaseUrl}/public/hello`, {responseType: 'text'}).subscribe(response => {
       console.log('Public = ' + response);
+      this.publicApiResponse = response;
     });
   }
 
