@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.authService.getAccessTokenSilently()
       .subscribe(accessToken => {
-        console.log(accessToken);
+        console.log(`accessToken = ${accessToken}`);
       });
   }
 
